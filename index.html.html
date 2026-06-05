@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Квест для Кріс 🌹</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rose:#C4536A;--gold:#B8965A;--dark:#1A1018;--mid:#6B5B65;--light:#F9F4F6;--white:#FFFFFF}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:var(--light);color:var(--dark);padding-bottom:100px}
+.header{background:var(--dark);padding:24px 20px 18px;text-align:center;position:sticky;top:0;z-index:100}
+.eyebrow{font-size:10px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+h1{font-family:'Playfair Display',serif;font-size:26px;color:#fff;line-height:1.2}
+h1 em{font-style:italic;color:#E8A0B0}
+.prog-wrap{margin-top:12px;display:flex;align-items:center;gap:10px}
+.prog-bg{flex:1;height:4px;background:rgba(255,255,255,.15);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .4s;width:0%}
+.prog-lbl{font-size:12px;color:rgba(255,255,255,.6);white-space:nowrap}
+.hint{margin:14px 16px 0;background:#F5EDE0;border-radius:16px;padding:14px 16px;border:1px solid rgba(184,150,90,.2)}
+.hint-title{font-size:15px;font-weight:500;color:var(--dark);margin-bottom:8px}
+.hint-steps{font-size:13px;color:var(--mid);line-height:1.9}
+.hint-steps b{color:var(--dark);font-weight:500}
+.album-btn{display:block;margin-top:12px;background:var(--rose);color:#fff;text-decoration:none;padding:11px 18px;border-radius:12px;font-weight:500;font-size:14px;text-align:center}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px 16px}
+.stat{background:#fff;border-radius:14px;padding:14px 10px;text-align:center;border:1px solid rgba(196,83,106,.12)}
+.stat-n{font-family:'Playfair Display',serif;font-size:28px;color:var(--rose);line-height:1}
+.stat-l{font-size:10px;color:var(--mid);margin-top:4px}
+.tabs{display:flex;gap:8px;padding:4px 16px 8px;overflow-x:auto;scrollbar-width:none;position:sticky;top:86px;background:var(--light);z-index:90}
+.tabs::-webkit-scrollbar{display:none}
+.tab{font-size:12px;font-weight:500;padding:6px 14px;border-radius:20px;border:1.5px solid rgba(196,83,106,.2);background:transparent;color:var(--mid);cursor:pointer;white-space:nowrap;transition:all .15s;font-family:'DM Sans',sans-serif}
+.tab.active{background:var(--rose);border-color:var(--rose);color:#fff}
+.sec-title{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:500;padding:14px 16px 8px;display:flex;align-items:center;gap:8px}
+.sec-title::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(184,150,90,.3),transparent)}
+.card{background:#fff;border-radius:16px;margin:0 16px 8px;border:1px solid rgba(196,83,106,.1);cursor:pointer;-webkit-user-select:none;user-select:none;transition:transform .15s}
+.card:active{transform:scale(0.985)}
+.card.done{background:#FAFAF8;border-color:rgba(184,150,90,.2)}
+.card-inner{display:flex;align-items:flex-start;gap:12px;padding:14px 16px}
+.num{font-family:'Playfair Display',serif;font-size:13px;color:rgba(196,83,106,.4);min-width:22px;padding-top:1px;text-align:right;flex-shrink:0}
+.card.done .num{color:rgba(184,150,90,.5)}
+.chk{width:22px;height:22px;border-radius:50%;border:1.5px solid rgba(196,83,106,.3);flex-shrink:0;margin-top:1px;position:relative;transition:all .2s}
+.card.done .chk{background:var(--gold);border-color:var(--gold)}
+.chk::after{content:'';display:none;position:absolute;top:5px;left:4px;width:11px;height:7px;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg)}
+.card.done .chk::after{display:block}
+.txt{font-size:15px;line-height:1.45;color:var(--dark);flex:1}
+.card.done .txt{color:var(--mid);text-decoration:line-through;text-decoration-color:rgba(184,150,90,.4)}
+.ico{font-size:18px;flex-shrink:0}
+.copy-btn{position:fixed;bottom:20px;left:16px;right:16px;background:var(--rose);color:#fff;border:none;border-radius:14px;padding:16px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;z-index:80}
+.toast{display:none;position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--dark);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;z-index:81;white-space:nowrap}
+@keyframes burst{0%{transform:scale(0);opacity:1}60%{transform:scale(1.4);opacity:1}100%{transform:scale(1);opacity:0}}
+.burst{position:fixed;pointer-events:none;font-size:28px;animation:burst .5s ease forwards;z-index:999}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="eyebrow">Мадрид · Червень 2025</div>
+  <h1>Квест для <em>Кріс</em> 🌹</h1>
+  <div class="prog-wrap">
+    <div class="prog-bg"><div class="prog-fill" id="prog"></div></div>
+    <div class="prog-lbl" id="prog-lbl">0 / 56</div>
+  </div>
+</div>
+
+<div class="hint">
+  <div class="hint-title">Мета — задоволення і багато спогадів 🌹</div>
+  <div class="hint-steps">
+    Виконувати не обов'язково — але весело.<br>
+    <b>1.</b> Зроби фотку<br>
+    <b>2.</b> Відміть завдання тут<br>
+    <b>3.</b> Скопіюй прогрес у чат — хай всі заздрять<br>
+    <b>4.</b> Не забудь додати фотку до Google Photos
+  </div>
+  <a class="album-btn" href="https://photos.app.goo.gl/UsBEKtAWWCvLg1MY8" target="_blank">📸 Додати фото до спільного альбому →</a>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-n" id="s-done">0</div><div class="stat-l">виконано</div></div>
+  <div class="stat"><div class="stat-n" id="s-left">60</div><div class="stat-l">залишилось</div></div>
+  <div class="stat"><div class="stat-n" id="s-pct">0%</div><div class="stat-l">прогрес</div></div>
+</div>
+
+<div class="tabs" id="tabs">
+  <button class="tab active" data-cat="all">Всі</button>
+  <button class="tab" data-cat="aero">✈️ Аеропорт</button>
+  <button class="tab" data-cat="spain">🇪🇸 Іспанія</button>
+  <button class="tab" data-cat="people">🫂 Люди</button>
+  <button class="tab" data-cat="food">🍷 Їжа і напої</button>
+  <button class="tab" data-cat="foto">📸 Фото</button>
+  <button class="tab" data-cat="chaos">🔥 Chaos</button>
+  <button class="tab" data-cat="girls">💃 Дівчата</button>
+  <button class="tab" data-cat="done">✅ Виконані</button>
+</div>
+
+<div id="list"></div>
+
+<button class="copy-btn" id="copy-btn">📋 Скопіювати мій прогрес для чату</button>
+<div class="toast" id="toast">Скопійовано! Вставляй у телеграм 🎉</div>
+
+<script>
+var Q=[
+  {id:1,cat:"aero",e:"✈️",t:"Селфі з валізою — ще вдома або в аеропорту"},
+  {id:2,cat:"aero",e:"💄",t:"Перефарбуй губи яскравим прямо в туалеті аеропорту і сфоткайся"},
+  {id:3,cat:"aero",e:"📰",t:"Знайди журнал в аеропорті і відтвори обкладинку"},
+  {id:4,cat:"aero",e:"🎵",t:"Потанцюй під музику прямо в аеропорті або в літаку"},
+  {id:5,cat:"aero",e:"🛫",t:"Знайди незнайомця і попроси сфоткати вас разом — він має посміхнутись"},
+  {id:6,cat:"aero",e:"🍸",t:"Замов щось алкогольне в аеропорту до посадки"},
+  {id:7,cat:"aero",e:"📍",t:"Перша фотка з мадридського аеропорту Barajas — ми прибули!"},
+  {id:8,cat:"spain",e:"🏛️",t:"Знайди красиву браму або арку і сфоткайся в ній"},
+  {id:9,cat:"spain",e:"🌿",t:"Фото в парку Retiro — максимально естетично"},
+  {id:10,cat:"spain",e:"🏰",t:"Selfie з офіційною будівлею або палацом"},
+  {id:11,cat:"spain",e:"🐂",t:"Знайди що-небудь з биком — символ Іспанії — і сфоткайся"},
+  {id:12,cat:"spain",e:"🏘️",t:"Знайди найгарнішу вуличку Мадрида і зроби editorial фото"},
+  {id:13,cat:"spain",e:"🌅",t:"Знайди місце з ідеальним мадридським sunset"},
+  {id:14,cat:"spain",e:"🌹",t:"Знайди і сфоткайся з квітами на вулиці"},
+  {id:15,cat:"spain",e:"📮",t:"Знайди щось яскраво-червоне і сфоткайся"},
+  {id:16,cat:"spain",e:"🎸",t:"Знайди вуличного музиканта і потанцюй поруч"},
+  {id:17,cat:"people",e:"😍",t:"Сфоткайся з гарячим іспанцем — він має посміхнутись"},
+  {id:18,cat:"people",e:"🫂",t:"Обійми незнайомця на вулиці — він має дозволити"},
+  {id:19,cat:"people",e:"📸",t:"Попроси випадкового перехожого зробити фото — він має постаратись"},
+  {id:20,cat:"people",e:"👓",t:"Всі 8 в окулярах від незнайомця або з магазину"},
+  {id:21,cat:"people",e:"👒",t:"Одягни чужий капелюх — з магазину або від незнайомця"},
+  {id:22,cat:"people",e:"🐱",t:"Знайди кота або собаку на вулиці і познайомся"},
+  {id:23,cat:"people",e:"🌹",t:"Зафліртуй з барменом — він має покраснішати"},
+  {id:24,cat:"food",e:"🥂",t:"Перший тост у Мадриді — фото всіх келихів"},
+  {id:25,cat:"food",e:"☕",t:"Замов café con leche + tostada як справжня іспанка"},
+  {id:26,cat:"food",e:"🥗",t:"Спробуй patatas bravas і відзнімай реакцію"},
+  {id:27,cat:"food",e:"🍳",t:"Фото бранч-столу зверху — все в кадрі"},
+  {id:28,cat:"food",e:"🍊",t:"Aperol spritz у красивому місці — golden hour"},
+  {id:29,cat:"food",e:"🧃",t:"Знайди найдивніший іспанський продукт в магазині"},
+  {id:30,cat:"food",e:"🍹",t:"Перший коктейль у барі — всі разом"},
+  {id:31,cat:"foto",e:"🪞",t:"Знайди красиве дзеркало або вітрину і зроби reflection фото"},
+  {id:32,cat:"foto",e:"🌆",t:"Знайди rooftop або горище з видом і сфоткайся"},
+  {id:33,cat:"foto",e:"😎",t:"Стань на місце туриста — фото з картою і розгубленим виглядом"},
+  {id:34,cat:"foto",e:"📰",t:"Знайди журнал і відтвори обкладинку"},
+  {id:35,cat:"foto",e:"🗿",t:"Відтвори точну позу статуї або скульптури"},
+  {id:36,cat:"foto",e:"💋",t:"Поцілуй пам'ятник або статую"},
+  {id:37,cat:"foto",e:"💄",t:"Перефарбуй губи в яскраве у туалеті і сфоткайся"},
+  {id:38,cat:"foto",e:"🌃",t:"Фото всіх на фоні нічного Мадрида"},
+  {id:39,cat:"foto",e:"🌅",t:"Фото на світанку — якщо дожили 😅"},
+  {id:40,cat:"chaos",e:"🍊",t:"Зайди в супермаркет з ананасом або кавуном на голові"},
+  {id:41,cat:"chaos",e:"💃",t:"Станцюй flamenco прямо всередині ресторану"},
+  {id:42,cat:"chaos",e:"😱",t:"Зроби іспанський крик посеред вулиці"},
+  {id:43,cat:"chaos",e:"🕵️",t:"Selfie у примірочній — на тобі щось жахливе"},
+  {id:44,cat:"chaos",e:"🤸",t:"Зроби bridge або колесо на вулиці Мадрида"},
+  {id:45,cat:"chaos",e:"🛍️",t:"Зайди в магазин і знайди найдурнішу річ — сфоткайся з нею"},
+  {id:46,cat:"chaos",e:"🤌",t:"Поясни щось руками як справжній іспанець"},
+  {id:47,cat:"chaos",e:"🎭",t:"Відтвори пристрасний flamenco жест прямо на вулиці"},
+  {id:48,cat:"chaos",e:"🎤",t:"Проспівай або прокричи пісню в мікрофон або просто дуже голосно"},
+  {id:49,cat:"chaos",e:"🕺",t:"Знайди найкращого танцюриста в клубі і станцюй поруч"},
+  {id:50,cat:"girls",e:"🤳",t:"Всі 8 в одному кадрі — не постановочно, а живо"},
+  {id:51,cat:"girls",e:"🏃",t:"Всі 8 стрибають одночасно — треба щоб всі в повітрі"},
+  {id:52,cat:"girls",e:"💄",t:"Фото: всі наносять makeup одночасно"},
+  {id:53,cat:"girls",e:"👠",t:"Всі туфлі в рядок на підлозі — flat lay"},
+  {id:54,cat:"girls",e:"💐",t:"Знайди вулицю або заклад з іменем Cristina або Kris"},
+  {id:55,cat:"girls",e:"💌",t:"Напиши побажання Кріс на серветці в кафе"},
+  {id:56,cat:"girls",e:"🌅",t:"Aperol spritz golden hour — жодного телефону в руках"}
+]
+
+var LABELS={
+  aero:"✈️ Аеропорт і переліт",
+  spain:"🇪🇸 Іспанія — місця і атмосфера",
+  people:"🫂 Люди — знайомці і незнайомці",
+  food:"🍷 Їжа і напої",
+  foto:"📸 Фото — естетика і кадри",
+  chaos:"🔥 Chaos — дурниці і виклики",
+  girls:"💃 Дівчата — разом"
+};
+var CATS=["aero","spain","people","food","foto","chaos","girls"];
+var TOTAL=Q.length;
+var done={};
+try{ var s=localStorage.getItem("kq2"); if(s) done=JSON.parse(s); }catch(e){}
+var filter="all";
+
+function save(){ try{ localStorage.setItem("kq2",JSON.stringify(done)); }catch(e){} }
+
+function stats(){
+  var n=Object.keys(done).filter(function(k){return done[k];}).length;
+  var pct=Math.round(n/TOTAL*100);
+  document.getElementById("s-done").textContent=n;
+  document.getElementById("s-left").textContent=TOTAL-n;
+  document.getElementById("s-pct").textContent=pct+"%";
+  document.getElementById("prog").style.width=pct+"%";
+  document.getElementById("prog-lbl").textContent=n+" / "+TOTAL;
+}
+
+function burst(x,y){
+  var em=["🌹","✨","🥂","💃","🎉"];
+  var el=document.createElement("div");
+  el.className="burst";
+  el.textContent=em[Math.floor(Math.random()*em.length)];
+  el.style.left=(x-20)+"px";
+  el.style.top=(y-20)+"px";
+  document.body.appendChild(el);
+  setTimeout(function(){el.remove();},550);
+}
+
+function toggle(id,x,y){
+  done[id]=!done[id];
+  save(); stats();
+  var card=document.getElementById("c"+id);
+  if(done[id]){ card.className="card done"; burst(x,y); }
+  else{ card.className="card"; }
+  if(filter==="done") render();
+}
+
+function render(){
+  var el=document.getElementById("list");
+  el.innerHTML="";
+  var cats=filter==="all"?CATS:filter==="done"?CATS:[filter];
+  var any=false;
+  cats.forEach(function(cat){
+    var items=Q.filter(function(q){
+      if(filter==="done") return q.cat===cat && done[q.id];
+      if(filter==="all"||filter===cat) return q.cat===cat;
+      return false;
+    });
+    if(!items.length) return;
+    any=true;
+    var sec=document.createElement("div");
+    sec.innerHTML='<div class="sec-title">'+LABELS[cat]+'</div>';
+    el.appendChild(sec);
+    items.forEach(function(q){
+      var d=done[q.id]?"card done":"card";
+      var chk=done[q.id]?'<div class="chk" style="background:#B8965A;border-color:#B8965A"></div>':'<div class="chk"></div>';
+      var txt=done[q.id]?'<span class="txt" style="color:#6B5B65;text-decoration:line-through;text-decoration-color:rgba(184,150,90,.4)">'+q.t+'</span>':'<span class="txt">'+q.t+'</span>';
+      var card=document.createElement("div");
+      card.className=d;
+      card.id="c"+q.id;
+      card.innerHTML='<div class="card-inner"><span class="num">'+q.id+'</span>'+chk+txt+'<span class="ico">'+q.e+'</span></div>';
+      card.addEventListener("click",function(ev){
+        toggle(q.id, ev.clientX||200, ev.clientY||300);
+      });
+      el.appendChild(card);
+    });
+  });
+  if(filter==="done"&&!any){
+    el.innerHTML='<div style="text-align:center;padding:40px 20px;color:#6B5B65;font-size:14px">Поки нічого не виконано 🙃<br>Починайте!</div>';
+  }
+}
+
+document.getElementById("tabs").addEventListener("click",function(e){
+  var btn=e.target.closest(".tab");
+  if(!btn) return;
+  filter=btn.getAttribute("data-cat");
+  document.querySelectorAll(".tab").forEach(function(t){t.classList.remove("active");});
+  btn.classList.add("active");
+  render();
+});
+
+document.getElementById("copy-btn").addEventListener("click",function(){
+  var n=Object.keys(done).filter(function(k){return done[k];}).length;
+  var pct=Math.round(n/TOTAL*100);
+  var text="🌹 Квест для Кріс — мій прогрес\n✅ "+n+" з "+TOTAL+" завдань ("+pct+"%)\n\n";
+  var items=Q.filter(function(q){return done[q.id];});
+  if(items.length){ text+="Що вже зробила:\n"; items.forEach(function(q){text+=q.e+" "+q.t+"\n";}); }
+  else{ text+="Ще нічого не виконано — але зараз починаю! 💃"; }
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(function(){
+      var t=document.getElementById("toast");
+      t.style.display="block";
+      setTimeout(function(){t.style.display="none";},3000);
+    });
+  }
+});
+
+render();
+stats();
+</script>
+</body>
+</html>
